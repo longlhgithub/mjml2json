@@ -109,7 +109,13 @@ function parseMjml(xml, { addEmptyAttributes = true, convertBooleans = true } = 
   const parser = new htmlparser.Parser(
     {
       onopentag: (name, attrs) => {
-        attrs = _.mapValues(attrs, val => decodeURIComponent(val))
+        attrs = _.mapValues(attrs, val => {
+          try {
+            return decodeURIComponent(val)
+          } catch (e) {
+            return val
+          }
+        })
 
         if (convertBooleans) {
           // "true" and "false" will be converted to bools
